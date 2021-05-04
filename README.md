@@ -5,11 +5,11 @@ This project is inspired by the [Open Source Big Data Toolbelt (OSBDET)](https:/
 To set up your RPi: 
 - flash Ubuntu 21.04 Server (64bit on an SD-Card
 - put that SD-Card into your RPi and start it up
-- SSH into the RPi and put your SSH Key on it [Tutorial Link](https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md)
+- SSH into the RPi and put your SSH Key on it ([link to tutorial](https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md))
 - Install Ansible on your Laptop/Desktop (aka control machine) [via pip](https://docs.ansible.com/ansible/2.3/intro_installation.html#latest-releases-via-pip)
 - download the contents of this repository with `git clone https://github.com/Maximilian-Pichler/BDPi`
 - open the `hosts.ini` file and change the IP-Adress in the second line to the one of your RPi and save it.
-- optional: if you want to use an external drive, add the UUID and the Format-Type of your drive here too.
+- (optional: if you want to use an external drive, add the UUID and the Format-Type of your drive here too.)
 - execute `ansible-playbook playbook.yml -i hosts.ini` from the BDPi-Repository folder on your control machine.
 - get something to drink...or eat. This will take a while.
 
