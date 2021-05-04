@@ -16,7 +16,7 @@ To set up your RPi:
 - download the contents of this repository with `git clone https://github.com/Maximilian-Pichler/BDPi`
 - open the `hosts.ini` file and change the IP-Adress in the second line to the one of your RPi and save it.
 - (optional: if you want to use an external drive, add the UUID and the Format-Type of your drive here too.)
-- execute `ansible-playbook playbook.yml -i hosts.ini` from the BDPi-Repository folder on your control machine.
+- execute `ansible-playbook playbook.yml` from the BDPi-Repository folder on your control machine.
 - get something to drink...or eat. This will take a while.
 
 ## WHY ANSIBLE?
