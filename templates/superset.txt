@@ -1,0 +1,13 @@
+[Unit]
+Description=Superset
+After=syslog.target network.target
+
+[Service]
+Restart=always
+User=
+Environment=
+WorkingDirectory=
+ExecStart=
+
+[Install]
+WantedBy=multi-user.target

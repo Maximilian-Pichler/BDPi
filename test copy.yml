@@ -1,0 +1,57 @@
+---
+- hosts: servers
+  gather_facts: yes
+  vars:
+    user: "{{ ansible_user }}"
+    home_dir: "/home/{{ user }}"
+  become: yes
+  tasks:
+    
+    ## SETUP SUPERSET
+    - name: setup superset
+      become: no
+      shell: "source {{ home_dir }}/archiconda3/bin/activate superset && export FLASK_APP=superset && superset {{ item }}"
+      args:
+        executable: /bin/bash
+      loop: 
+        - "db upgrade"
+        - "fab create-admin --username admin --firstname Maximilian --lastname Pichler --email {{ user }}@{{ user }}.com --password abcd"
+        - init
+
+    ## Configure superset service
+    - name: Copy the superset.service file
+      template: 
+        src: superset.txt
+        dest: /etc/systemd/system/superset.service
+        backup: no
+    
+    - name: set User
+      lineinfile:
+        path: "/etc/systemd/system/superset.service"
+        regexp: '^User\='
+        line: 'User={{ user }}'
+
+    - name: set superset WorkingDirectory
+      lineinfile:
+        path: "/etc/systemd/system/superset.service"
+        regexp: 'WorkingDirectory\='
+        line: 'WorkingDirectory={{ home_dir }}'
+
+    - name: set PATH
+      lineinfile:
+        path: "/etc/systemd/system/superset.service"
+        regexp: '^Environment\='
+        line: 'Environment="PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/superset/bin"'
+
+    - name: set superset executable
+      lineinfile:
+        path: "/etc/systemd/system/superset.service"
+        regexp: 'ExecStart\='
+        line: 'ExecStart={{ home_dir }}/archiconda3/envs/superset/bin/superset run -h 0.0.0.0  -p 8088 --reload --debugger'
+
+    - name: Restart superset and enable service at startup
+      systemd:
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
+        name: superset

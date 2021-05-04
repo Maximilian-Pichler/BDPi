@@ -1,0 +1,16 @@
+lxml
+setuptools
+virtualenv
+wheel
+Cython
+pandas
+jupyter
+jupyterlab
+requests
+stem
+SQLAlchemy
+beautifulsoup4
+html5lib
+PyMySQL
+findspark
+websocket-client

@@ -1,0 +1,13 @@
+[Unit]
+Requires=zookeeper.service
+After=zookeeper.service
+
+[Service]
+Type=simple
+User=
+ExecStart=
+ExecStop=
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target

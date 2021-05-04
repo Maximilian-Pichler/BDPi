@@ -1,0 +1,22 @@
+---
+- hosts: servers
+  gather_facts: yes
+  vars:
+    user: "{{ ansible_user }}"
+    home_dir: "/home/{{ user }}"
+  become: yes
+  tasks:
+    
+    ## SETUP SUPERSET
+    - name: setup superset
+      become: yes
+      become_user: '{{ user }}'
+      shell: "source {{ home_dir }}/archiconda3/bin/activate superset && {{ item }}"
+      args:
+        executable: /bin/bash
+      loop: 
+        - "superset db upgrade"
+        - "export FLASK_APP=superset && superset fab create-admin --username admin --firstname Maximilian --lastname Pichler --email {{ user }}@{{ user }}.com --password abcd"
+        - "export FLASK_APP=superset && superset init"
+
+
