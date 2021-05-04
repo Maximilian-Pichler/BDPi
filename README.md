@@ -14,6 +14,6 @@ To set up your RPi:
 - get something to drink...or eat. This will take a while.
 
 ## WHY ANSIBLE?
-- Because I was intrigued after reading about its capabilities [(short video)](https://www.ansible.com/resources/videos/quick-start-video).
-- Because I am dumb: I'm no expert in setting up these environments, so I needed something that automates my steps, in case I have to reset the RPi because of some misconfiguration...and this happened many, many times.
-- Because I am lazy: besides automating the setup, Ansible-Playbooks are human-readable (perfect for Beginners like me) and thus can be used for documenting the steps involved in this setup.
+- because I was intrigued after reading about its capabilities. ([Deploy a Kafka Cluster with Terraform and Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb)[(short introduction video)](https://www.ansible.com/resources/videos/quick-start-video))
+- because I am dumb: I'm no expert in setting up Servers or VMs, so I needed something to automate my steps in case I had to start from scratch because I messed up something *...and this happened many, many, many times*.
+- because I am lazy: besides automating the setup, Ansible-Playbooks are human-readable and thus can be used for documenting the steps involved in this setup.
