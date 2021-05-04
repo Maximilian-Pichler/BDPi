@@ -1,5 +1,11 @@
 # BIG DATA Pi 
-This project is inspired by the [Open Source Big Data Toolbelt (OSBDET)](https://github.com/raulmarinperez/osbdet) by Raúl Marín ([LinkedIn](https://github.com/raulmarinperez) | [GitHub](https://www.linkedin.com/in/raulmarinperez/)) and provides an educational platform of Big Data Technologies. It is intended for educational purposes and might be helpful in personal projects.
+This project is inspired by the [Open Source Big Data Toolbelt (OSBDET)](https://github.com/raulmarinperez/osbdet) by Raúl Marín ([LinkedIn](https://github.com/raulmarinperez) | [GitHub](https://www.linkedin.com/in/raulmarinperez/)) and provides an educational platform with the following (Big Data) Technologies installed and configured:
+- Apache Kafka (message broker and Storage)
+- Jupyter Lab (development interface)
+- Apache Spark (stream processing)
+- MariaDB (storage)
+- Apache Superset (visualization)
+- Samba (network file service)
 
 ## HOW TO USE IT
 To set up your RPi: 
@@ -17,3 +23,10 @@ To set up your RPi:
 - because I was intrigued after reading about its capabilities. ([Deploy a Kafka Cluster with Terraform and Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb) | [short introduction video](https://www.ansible.com/resources/videos/quick-start-video))
 - because I am dumb: I'm no expert in setting up Servers or VMs, so I needed something to automate my steps in case I had to start from scratch because I messed up something *...and this happened many, many, many times*.
 - because I am lazy: besides automating the setup, Ansible-Playbooks are human-readable and thus can be used for documenting the steps involved in this setup.
+
+
+## Upcoming Features
+- *Spark-Cluster Integration*
+- *VPN for remote access*
+- *more operating systems (CentOS, Debian)*
+- *more processor architectures (x64, armhf)*
