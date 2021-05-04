@@ -8,8 +8,6 @@
     home_dir: "/home/{{ ansible_user }}"
 
   tasks:
-    
-
     # SET UP DIRECTORIES #
     ###################################################################################################################
     - name: create directories
@@ -532,6 +530,5 @@
 
 
   handlers:
-
     - name: reboot
       reboot:
