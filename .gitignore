@@ -1,3 +1,4 @@
 .DS_STORE
 facts.json
 test*.yml
+my_*.*

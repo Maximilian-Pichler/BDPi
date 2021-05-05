@@ -284,8 +284,6 @@
             'Disallow root login remotely\? \[Y/n\]': 'n'
             'Remove test database and access to it\? \[Y/n\]': 'n'
             'Reload privilege tables now\? \[Y/n\]': 'y'
-        echo: true
-      no_log: false
       
     - name: create mariaDB user
       mysql_user:
