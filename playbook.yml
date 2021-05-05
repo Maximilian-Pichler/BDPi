@@ -529,7 +529,6 @@
     - name: reboot
       reboot:
 
-
   handlers:
     - name: reboot
       reboot:
