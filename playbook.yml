@@ -526,6 +526,9 @@
         recurse: yes
       notify: reboot
 
+    - name: reboot
+      reboot:
+
 
   handlers:
     - name: reboot
