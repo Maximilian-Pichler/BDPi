@@ -163,7 +163,7 @@
     # DEVELOPMENT #
     ###################################################################################################################  
     ## ARCHICONDA
-    - name: check if archiconda folder is present
+    - name: check if conda binary is present
       stat: path={{ home_dir }}/archiconda3/bin/conda
       register: conda
 
