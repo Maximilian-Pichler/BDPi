@@ -28,7 +28,7 @@ This Ansible-Playbook installs and configures the following technologies:
 - a USB-C power supply
 - an SD Card
 - admin access to your router
-- recommended: a LAN-cable to directly connect to the router
+- recommended: a LAN-cable to connect to the router
 
 
 ### Set up your RPi: 
