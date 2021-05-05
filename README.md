@@ -25,7 +25,7 @@ This Ansible-Playbook installs and configures the following technologies:
 ## HOW TO USE IT
 ### Prerequisites:
 - a Raspberry Pi 4/400
-- a USB-C-c power supply
+- a USB-C power supply
 - an SD Card
 - admin access to your router
 - recommended: a LAN-cable to directly connect to the router
