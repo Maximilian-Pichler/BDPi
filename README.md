@@ -59,8 +59,8 @@ From a security standpoint this configuration is not ideal, but makes things eas
 
 ## WHY ANSIBLE?
 - because I was intrigued after reading about its capabilities. ([Deploy a Kafka Cluster with Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb) | [short introduction video](https://www.ansible.com/resources/videos/quick-start-video))
-- because I am dumb: I needed something to automate my steps in case I had to start from scratch *...and this happened many, many, many times*.
-- because I am lazy: Ansible-Playbooks are human-readable and reduce the need for documentation.
+- because I'm dumb: I needed something to automate my steps in case I had to start from scratch *...and this happened many, many, many times*.
+- because I'm lazy: Ansible-Playbooks are human-readable and reduce the need for documentation.
 
 ---
 
