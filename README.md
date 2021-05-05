@@ -28,6 +28,7 @@ Once the installation is finished, the services are listening on the following p
 | Maria DB  | 3306   | abcd              |ubuntu|
 |Superset   | 8088   | abcd              |ubuntu|
 |Network Storage|  445   | abcd              |ubuntu|
+
 *SparkHub only when a Spark-Job is active.
 
 From a security standpoint this configuration is not ideal, but makes things easier to access.
