@@ -5,7 +5,6 @@ This project is inspired by the [Open Source Big Data Toolbelt (OSBDET)](https:/
 ![](/assets/raspberry-pi-4.png)
 
 
-
 The newest version of the small single-board computer - the Raspberry Pi 4 B - is equipped with a faster processor and more RAM than its predecessors. This allows users to run more demanding applications while still benefitting from the energy efficiency of the ARM-Architecture. The RPi only uses 6.4W under full load, which is ~1/10 of a traditional light-bulb. 
 
 ---
