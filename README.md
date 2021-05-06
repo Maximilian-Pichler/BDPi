@@ -36,7 +36,7 @@ This Ansible-Playbook installs and configures the following technologies:
 - Install Ansible on your Laptop/Desktop/control machine ([via pip](https://medium.com/@mitesh_shamra/introduction-to-ansible-e5b56ee76b8c) | [official documentation](https://docs.ansible.com/ansible/2.3/intro_installation.html#latest-releases-via-pip))
 
 ### Run the Ansible Playbook
-- download the contents of this repository with `git clone https://github.com/Maximilian-Pichler/BDPi`
+- download this repository to your control machine with `git clone https://github.com/Maximilian-Pichler/BDPi`
 - open the `hosts.ini` file and put the IP-Adress of your RPi in the second line.
 - if you use additional storage, add the UUID and the Format-Type of your drive here too, otherwise leave these strings empty.
 - execute `ansible-playbook playbook.yml` from the BDPi-Repository folder on your control machine.
@@ -44,13 +44,13 @@ This Ansible-Playbook installs and configures the following technologies:
 
 ## Have Fun
 Once the installation is finished, the services are listening on the following ports:
-|  Service  |  Port  | Password / Token  | user |
-|-----------|--------|-------------------|------|
-|SparkHub*  | 4040   |                   |      |
-|Jupyter Lab| 8881   | abcd              |      |
-| Maria DB  | 3306   | abcd              |ubuntu|
-|Superset   | 8088   | abcd              |ubuntu|
-|Network Storage|  445   | abcd              |ubuntu|
+|Service        |Port |Password / Token| user |
+|---------------|-----|----------------|------|
+|SparkHub*      |4040 |                |      |
+|Jupyter Lab    |8881 |abcd            |      |
+|Maria DB       |3306 |abcd            |ubuntu|
+|Superset       |8088 |abcd            |ubuntu|
+|Network Storage|445  |abcd            |ubuntu|
 
 *only with an active Spark-Job
 
