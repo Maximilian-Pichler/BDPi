@@ -7,6 +7,10 @@
   vars:
     home_dir: "/home/{{ ansible_user }}"
 
+  handlers:
+    - name: reboot
+      reboot:
+
   tasks:
     # SET UP DIRECTORIES #
     ###################################################################################################################
@@ -526,9 +530,11 @@
         recurse: yes
       notify: reboot
 
-    - name: reboot
+
+    # FINAL REBOOT #
+    ################################################################################################################### 
+    - name: final reboot
       reboot:
 
-  handlers:
-    - name: reboot
-      reboot:
+
+
