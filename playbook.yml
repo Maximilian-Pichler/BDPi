@@ -250,7 +250,7 @@
       lineinfile:
         path: "/etc/systemd/system/jupyter.service"
         regexp: '^Environment\='
-        line: 'Environment="PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/streaming/bin"'
+        line: 'Environment="PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/streaming/bin" "SPARK_HOME={{ home_dir }}/spark"'
     
     - name: set Workirectory
       lineinfile:
@@ -349,6 +349,12 @@
         regexp: '^User\='
         line: 'User={{ ansible_user }}'
 
+    - name: set zookeeper environment
+      lineinfile:
+        path: "/etc/systemd/system/zookeeper.service"
+        regexp: 'Environment\='
+        line: "Environment='KAFKA_HOME={{ home_dir }}/kafka'"
+
     - name: set zookeeper executable
       lineinfile:
         path: "/etc/systemd/system/zookeeper.service"
@@ -380,6 +386,13 @@
         path: "/etc/systemd/system/kafka.service"
         regexp: '^User\='
         line: 'User={{ ansible_user }}'
+
+    - name: set kafka environment
+      lineinfile:
+        path: "/etc/systemd/system/kafka.service"
+        regexp: 'Environment\='
+        line: "Environment='KAFKA_HOME={{ home_dir }}/kafka'"
+
 
     - name: set kafka executable
       lineinfile:
@@ -419,10 +432,10 @@
         dest: "{{ home_dir }}/archiconda3/envs/streaming/share/jupyter/kernels/python3/kernel.json"
         backup: no
 
-    - name: set spark_home
+    - name: set spark_home 
       lineinfile:
         path: "{{ home_dir }}/archiconda3/envs/streaming/share/jupyter/kernels/python3/kernel.json"
-        regexp: '^ "env"\: \{"SPARK_HOME"\:""\}'
+        regexp: '^ "env"\: \{"SPARK_HOME"\:""'
         line: ' "env": {"SPARK_HOME":"{{ home_dir }}/spark"}'
 
     ## INSTALL SUPERSET

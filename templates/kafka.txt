@@ -1,10 +1,12 @@
 [Unit]
+Description=Kafka
 Requires=zookeeper.service
 After=zookeeper.service
 
 [Service]
 Type=simple
 User=
+Environment=
 ExecStart=
 ExecStop=
 Restart=on-abnormal
