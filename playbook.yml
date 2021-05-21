@@ -105,7 +105,7 @@
       when: "'librdkafka' not in ansible_facts.packages"
     
     - name: configure librdkafka installation
-      command: ./configure
+      command: "./configure" # --prefix=/usr/lib
       args:
         chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
       when: "'librdkafka' not in ansible_facts.packages"
@@ -120,6 +120,13 @@
     - name: install librdkafka
       become: yes
       command: "checkinstall -y"
+      args:
+        chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
+      when: "'librdkafka' not in ansible_facts.packages"
+
+    - name: configure librdkafka
+      become: yes
+      command: "ldconfig"
       args:
         chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
       when: "'librdkafka' not in ansible_facts.packages"
@@ -155,8 +162,8 @@
       expect:
         command: 'smbpasswd -a {{ ansible_user }}'
         responses:
-            'New SMB password': 'abcd'
-            'Retype new SMB password': 'abcd'
+            'New SMB password': "{{ default_password }}"
+            'Retype new SMB password': "{{ default_password }}"
         echo: true
       no_log: false
 
@@ -190,6 +197,11 @@
       when: conda.stat.exists == False
       no_log: false
 
+    - name: add archiconda binary to path
+      lineinfile:
+        dest: "{{ home_dir }}/.bashrc"
+        line: ". {{ home_dir }}/archiconda3/etc/profile.d/conda.sh"
+
 
     # STREAMING ENVIRONMENT SETUP #
     ###################################################################################################################  
@@ -216,60 +228,23 @@
       when: streaming.stat.exists == False
       no_log: false 
 
-    - name: install the package, force upgrade
+    - name: force upgrade pip
       pip: 
-        name: pip
+        name: "pip"
         executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
         state: latest
+
+    - name: install other pip-packages
+      pip:
+        name: 
+          - python-binance
+          - confluent-kafka==1.6.1
+        executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
 
     - name: Remove requirements.txt
       file:
         path: "/tmp/requirements.txt"
         state: absent
-
-    - name: configure auto-activate
-      lineinfile:
-        dest: "{{ home_dir }}/.bashrc"
-        line: ". {{ home_dir }}/archiconda3/etc/profile.d/conda.sh"
-
-
-    ### CONFIGURE JUPYTER SERVICE
-    - name: Copy the jupyter.service file
-      template: 
-        src: jupyter.txt
-        dest: /etc/systemd/system/jupyter.service
-        backup: no
-    
-    - name: set User
-      lineinfile:
-        path: "/etc/systemd/system/jupyter.service"
-        regexp: '^User\='
-        line: 'User={{ ansible_user }}'
-
-    - name: set PATH
-      lineinfile:
-        path: "/etc/systemd/system/jupyter.service"
-        regexp: '^Environment\='
-        line: 'Environment="PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/streaming/bin" "SPARK_HOME={{ home_dir }}/spark"'
-    
-    - name: set Workirectory
-      lineinfile:
-        path: "/etc/systemd/system/jupyter.service"
-        regexp: '^WorkDirectory\='
-        line: "WorkDirectory={{ home_dir }}/projects"
-
-    - name: set jupyter executable
-      lineinfile:
-        path: "/etc/systemd/system/jupyter.service"
-        regexp: 'ExecStart\='
-        line: "ExecStart={{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ansible_default_ipv4.address}} --port=8881 --NotebookApp.token=abcd --notebook-dir={{ home_dir }}/projects"
-
-    - name: Restart jupyter and enable service at startup
-      systemd:
-        state: restarted
-        enabled: yes
-        daemon_reload: yes
-        name: jupyter
 
 
     ## SETUP MARIA-DB
@@ -294,8 +269,8 @@
         login_unix_socket: /var/run/mysqld/mysqld.sock
         name: '{{ ansible_user }}'
         host: '%'
-        password: "abcd"
-        priv: '*.*:ALL'
+        password: "{{ default_password }}"
+        priv: "*.*:ALL"
         state: present
 
     - name: enable remote login
@@ -312,7 +287,7 @@
 
     - name: Download and unzip Kafka if not present
       unarchive:
-        src: https://apachemirror.sg.wuchna.com/kafka/2.8.0/kafka_2.12-2.8.0.tgz  
+        src: "https://ftp.cixug.es/apache/kafka/2.7.0/kafka_2.13-2.7.0.tgz"
         dest: "{{ home_dir }}/kafka"
         remote_src: yes
         extra_opts: [--strip-components=1]
@@ -337,81 +312,50 @@
         line: log.dirs={{ home_dir }}/kafka/data/kafka
 
     ## CONFIGURE ZOOKEEPER SERVICE
-    - name: Copy the zookeeper.service file
-      template: 
-        src: zookeeper.txt
-        dest: /etc/systemd/system/zookeeper.service
-        backup: no
-
-    - name: set User
-      lineinfile:
-        path: "/etc/systemd/system/zookeeper.service"
-        regexp: '^User\='
-        line: 'User={{ ansible_user }}'
-
-    - name: set zookeeper environment
-      lineinfile:
-        path: "/etc/systemd/system/zookeeper.service"
-        regexp: 'Environment\='
-        line: "Environment='KAFKA_HOME={{ home_dir }}/kafka'"
-
-    - name: set zookeeper executable
-      lineinfile:
-        path: "/etc/systemd/system/zookeeper.service"
-        regexp: 'ExecStart\='
-        line: "ExecStart={{ home_dir }}/kafka/bin/zookeeper-server-start.sh {{ home_dir }}/kafka/config/zookeeper.properties"
-
-    - name: set zookeeper stop executable
-      lineinfile:
-        path: "/etc/systemd/system/zookeeper.service"
-        regexp: 'ExecStop\='
-        line: "ExecStop={{ home_dir }}/kafka/bin/zookeeper-server-stop.sh"
-
-    - name: Restart zookeeper and enable service at startup
+    - name: define service variables
+      set_fact:
+        service_description: "zookeeper"
+        service_user: "{{ ansible_user }}"
+        service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
+        service_workdir: ""
+        service_execstart: "{{ home_dir }}/kafka/bin/zookeeper-server-start.sh {{ home_dir }}/kafka/config/zookeeper.properties"
+        service_execstop: "{{ home_dir }}/kafka/bin/zookeeper-server-stop.sh"
+    
+    - name: create {{ service_description }} service file
+      template:
+        src: templates/sample.service.j2
+        dest: /etc/systemd/system/{{ service_description }}.service
+    
+    - name: enable and restart {{ service_description }} service
       systemd:
-        state: started
+        state: restarted
         enabled: yes
         daemon_reload: yes
-        name: zookeeper
+        name: "{{ service_description }}"
+      notify: reboot
 
     ## CONFIGURE KAFKA SERVICE
-    - name: Copy the kafka.service file
-      template: 
-        src: kafka.txt
-        dest: /etc/systemd/system/kafka.service
-        backup: no
-
-    - name: set User
-      lineinfile:
-        path: "/etc/systemd/system/kafka.service"
-        regexp: '^User\='
-        line: 'User={{ ansible_user }}'
-
-    - name: set kafka environment
-      lineinfile:
-        path: "/etc/systemd/system/kafka.service"
-        regexp: 'Environment\='
-        line: "Environment='KAFKA_HOME={{ home_dir }}/kafka'"
-
-
-    - name: set kafka executable
-      lineinfile:
-        path: "/etc/systemd/system/kafka.service"
-        regexp: 'ExecStart\='
-        line: "ExecStart=/bin/sh -c '{{ home_dir }}/kafka/bin/kafka-server-start.sh {{ home_dir }}/kafka/config/server.properties > {{ home_dir }}/kafka/kafka.log 2>&1'"
-
-    - name: set kafka stop executable
-      lineinfile:
-        path: "/etc/systemd/system/kafka.service"
-        regexp: 'ExecStop\='
-        line: "ExecStop={{ home_dir }}/kafka/bin/kafka-server-stop.sh'"
-
-    - name: Restart kafka and enable service at startup
+    - name: define service variables
+      set_fact:
+        service_description: "kafka"
+        service_user: "{{ ansible_user }}"
+        service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
+        service_workdir: ""
+        service_execstart: "/bin/sh -c '{{ home_dir }}/kafka/bin/kafka-server-start.sh {{ home_dir }}/kafka/config/server.properties > {{ home_dir }}/kafka/kafka.log 2>&1'"
+        service_execstop: "{{ home_dir }}/kafka/bin/kafka-server-stop.sh"
+    
+    - name: create {{ service_description }} service file
+      template:
+        src: templates/sample.service.j2
+        dest: /etc/systemd/system/{{ service_description }}.service
+    
+    - name: enable and restart {{ service_description }} service
       systemd:
-        state: started
+        state: restarted
         enabled: yes
         daemon_reload: yes
-        name: kafka
+        name: "{{ service_description }}"
+      notify: reboot
 
     ## SPARK
     - name: check if spark folder is present
@@ -426,17 +370,29 @@
         extra_opts: [--strip-components=1]
       when: spark.stat.exists == False
 
-    - name: Copy the jupyter kernel.json file
-      template: 
-        src: kernel.json
-        dest: "{{ home_dir }}/archiconda3/envs/streaming/share/jupyter/kernels/python3/kernel.json"
-        backup: no
 
-    - name: set spark_home 
-      lineinfile:
-        path: "{{ home_dir }}/archiconda3/envs/streaming/share/jupyter/kernels/python3/kernel.json"
-        regexp: '^ "env"\: \{"SPARK_HOME"\:""'
-        line: ' "env": {"SPARK_HOME":"{{ home_dir }}/spark"}'
+    ### CONFIGURE JUPYTER SERVICE
+    - name: define service variables
+      set_fact:
+        service_description: "jupyter"
+        service_user: "{{ ansible_user }}"
+        service_environment: '"PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/streaming/bin:" "SPARK_HOME={{ home_dir }}/spark"'
+        service_workdir: "{{ home_dir }}/projects"
+        service_execstart: "{{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ ansible_default_ipv4.address }} --port=8881 --NotebookApp.token={{ default_password }} --notebook-dir={{ home_dir }}/projects"
+        service_execstop: ""
+    
+    - name: create {{ service_description }} service file
+      template:
+        src: templates/sample.service.j2
+        dest: /etc/systemd/system/{{ service_description }}.service
+    
+    - name: enable and restart {{ service_description }} service
+      systemd:
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
+        name: "{{ service_description }}"
+      notify: reboot
 
     ## INSTALL SUPERSET
     - name: check if superset environment is present
@@ -492,46 +448,31 @@
         executable: /bin/bash
       loop: 
         - "superset db upgrade"
-        - "export FLASK_APP=superset && superset fab create-admin --username {{ ansible_user }} --firstname Maximilian --lastname Pichler --email {{ ansible_user }}@{{ ansible_user }}.com --password abcd"
+        - "export FLASK_APP=superset && superset fab create-admin --username {{ ansible_user }} --firstname Maximilian --lastname Pichler --email {{ ansible_user }}@{{ ansible_user }}.com --password {{ default_password }}"
         - "export FLASK_APP=superset && superset init"
 
     ## CONFIGURE SUPERSET SERVICE
-    - name: Copy the superset.service file
-      template: 
-        src: superset.txt
-        dest: /etc/systemd/system/superset.service
-        backup: no
+    - name: define service variables
+      set_fact:
+        service_description: "superset"
+        service_user: "{{ ansible_user }}"
+        service_environment: "PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/superset/bin"
+        service_workdir: "{{ home_dir }}"
+        service_execstart: "{{ home_dir }}/archiconda3/envs/superset/bin/superset run -h 0.0.0.0  -p 8088 --reload --debugger"
+        service_execstop: ""
     
-    - name: set User
-      lineinfile:
-        path: "/etc/systemd/system/superset.service"
-        regexp: '^User\='
-        line: 'User={{ ansible_user }}'
-
-    - name: set superset WorkingDirectory
-      lineinfile:
-        path: "/etc/systemd/system/superset.service"
-        regexp: 'WorkingDirectory\='
-        line: 'WorkingDirectory={{ home_dir }}'
-
-    - name: set PATH
-      lineinfile:
-        path: "/etc/systemd/system/superset.service"
-        regexp: '^Environment\='
-        line: 'Environment="PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/superset/bin"'
-
-    - name: set superset executable
-      lineinfile:
-        path: "/etc/systemd/system/superset.service"
-        regexp: 'ExecStart\='
-        line: 'ExecStart={{ home_dir }}/archiconda3/envs/superset/bin/superset run -h 0.0.0.0  -p 8088 --reload --debugger'
-
-    - name: Restart superset and enable service at startup
+    - name: create {{ service_description }} service file
+      template:
+        src: templates/sample.service.j2
+        dest: /etc/systemd/system/{{ service_description }}.service
+    
+    - name: enable and restart {{ service_description }} service
       systemd:
         state: restarted
         enabled: yes
         daemon_reload: yes
-        name: superset
+        name: "{{ service_description }}"
+      notify: reboot
 
     # SET PERMISSIONS #
     ###################################################################################################################  
