@@ -8,4 +8,4 @@ findspark
 SQLAlchemy
 PyMySQL
 websocket-client
-
+jupyter-archive

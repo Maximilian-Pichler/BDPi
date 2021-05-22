@@ -90,6 +90,7 @@
         - apt-transport-https
         - ca-certificates
         - docker.io
+        
 
     ## build librdkafka library from source (needed for kafka-confluent)
     - name: read & check installed packages
