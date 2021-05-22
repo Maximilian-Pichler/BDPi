@@ -1,0 +1,10 @@
+---
+# SET PERMISSIONS #
+###################################################################################################################  
+- name: set "{{ ansible_user }}" as owner
+  file: 
+    dest: "{{ home_dir }}"
+    owner: "{{ ansible_user }}" 
+    group: "{{ ansible_user }}" 
+    recurse: yes
+  notify: reboot

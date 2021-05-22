@@ -1,0 +1,28 @@
+---
+# SPARK #
+################################################################################################################### 
+- name: check if spark folder is present
+  stat: path="{{ home_dir }}/spark/bin"
+  register: spark
+
+- name: Download and unzip spark if not present
+  unarchive:
+    src: https://ftp.cixug.es/apache/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz
+    dest: "{{ home_dir }}/spark"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+  when: spark.stat.exists == False
+
+## add Spark to PATH 
+- name: Add spark to system-wide ENVIRONMENT.
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: 'PATH=$PATH:{{ home_dir }}/spark/bin'
+  notify: reboot
+
+## add SPARK_HOME to jupyter ENVIRONMENT
+- name: enable remote login
+  lineinfile:
+    path: /etc/systemd/system/jupyter.service
+    regexp: '^Environment='
+    line: Environment="SPARK_HOME={{ home_dir }}/spark"

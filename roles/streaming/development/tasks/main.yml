@@ -1,0 +1,119 @@
+---
+# STREAMING ENVIRONMENT SETUP #
+###################################################################################################################  
+    ## build librdkafka library from source (needed for kafka-confluent)
+- name: read & check installed packages
+  package_facts:
+    manager: "auto"
+
+- name: download and unzip source-code for librdkafka if not installed
+  unarchive:
+    src: http://mirrordirector.raspbian.org/raspbian/pool/main/libr/librdkafka/librdkafka_1.6.0.orig.tar.gz
+    dest: "{{ home_dir }}/tmp"
+    remote_src: yes
+  when: "'librdkafka' not in ansible_facts.packages"
+
+- name: configure librdkafka installation
+  command: "./configure" # --prefix=/usr/lib
+  args:
+    chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
+  when: "'librdkafka' not in ansible_facts.packages"
+
+- name: build librdkafka from source
+  command: make
+  args:
+    chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
+  when: 
+    - "'librdkafka' not in ansible_facts.packages"
+
+- name: install librdkafka
+  become: yes
+  command: "checkinstall -y"
+  args:
+    chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
+  when: "'librdkafka' not in ansible_facts.packages"
+
+- name: configure librdkafka
+  become: yes
+  command: "ldconfig"
+  args:
+    chdir: "{{ home_dir }}/tmp/librdkafka-1.6.0"
+  when: "'librdkafka' not in ansible_facts.packages"
+
+- name: remove build directory
+  file:
+    path: "{{ home_dir }}/tmp/librdkafka_1.6.0"
+    state: absent
+  when: "'librdkafka' not in ansible_facts.packages"
+
+- name: remove source-code
+  file:
+    path: "{{ home_dir }}/tmp/librdkafka_1.6.0.orig.tar.gz"
+    state: absent
+  when: "'librdkafka' not in ansible_facts.packages"
+
+
+## Setup Archiconda
+- name: check if streaming environment is present
+  stat: path="{{ home_dir }}/archiconda3/envs/streaming/bin/python"
+  register: streaming
+
+- name: Copy requirements.txt
+  template: 
+    src: requirements.txt
+    dest: "{{ home_dir }}/tmp/requirements.txt"
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: '0775'
+    backup: no
+
+- name: setup streaming conda-env
+  expect:
+    command: "{{ home_dir }}/archiconda3/bin/conda env create --name streaming python=3.7.1 --file {{ home_dir }}/tmp/requirements.txt"
+    responses:
+        'Proceed': 'y'
+    echo: true
+    timeout: 36000
+  when: streaming.stat.exists == False
+  no_log: false 
+
+- name: force upgrade pip
+  pip: 
+    name: "pip"
+    executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
+    state: latest
+
+- name: install pip-packages (not present on conda-forge)
+  pip:
+    name: 
+      - python-binance
+      - confluent-kafka==1.6.1
+    executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
+
+- name: Remove requirements.txt
+  file:
+    path: "/tmp/requirements.txt"
+    state: absent
+
+## CONFIGURE JUPYTER SERVICE
+- name: define service variables
+  set_fact:
+    service_description: "jupyter"
+    service_user: "{{ ansible_user }}"
+    service_environment: ""
+    service_workdir: "{{ home_dir }}/projects"
+    service_execstart: "{{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ ansible_default_ipv4.address }} --port=8881 --NotebookApp.token={{ default_password }} --notebook-dir={{ home_dir }}/"
+    service_execstop: ""
+
+- name: create {{ service_description }} service file
+  template:
+    src: templates/sample.service.j2
+    dest: /etc/systemd/system/{{ service_description }}.service
+
+- name: enable and restart {{ service_description }} service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service_description }}"
+  notify: reboot

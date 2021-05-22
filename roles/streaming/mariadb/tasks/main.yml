@@ -1,0 +1,33 @@
+---
+# SETUP MARIA-DB #
+################################################################################################################### 
+- name: install PyMySQL
+  command: /usr/bin/pip3 install PyMySQL
+
+- name: Case insensitive password string match
+  expect:
+    command: mysql_secure_installation
+    responses:
+        'Enter current password for root \(enter for none\)': '\n'
+        'Switch to unix_socket authentication \[Y/n\]': 'n'
+        'Set root password\? \[Y/n\]': 'n'
+        'Change the root password\? \[Y/n\]': 'n'
+        'Remove anonymous users\? \[Y/n\]': 'n'
+        'Disallow root login remotely\? \[Y/n\]': 'n'
+        'Remove test database and access to it\? \[Y/n\]': 'n'
+        'Reload privilege tables now\? \[Y/n\]': 'y'
+  
+- name: create mariaDB user
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: '{{ ansible_user }}'
+    host: '%'
+    password: "{{ default_password }}"
+    priv: "*.*:ALL"
+    state: present
+
+- name: enable remote login
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: '#bind-address = 127.0.0.1'

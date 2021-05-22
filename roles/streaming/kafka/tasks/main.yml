@@ -1,0 +1,84 @@
+# SETUP KAFKA #
+################################################################################################################### 
+- name: check if kafka folder is present
+  stat: path="{{ home_dir }}/kafka/bin"
+  register: kafka
+
+- name: Download and unzip Kafka if not present
+  unarchive:
+    src: "https://ftp.cixug.es/apache/kafka/2.7.0/kafka_2.13-2.7.0.tgz"
+    dest: "{{ home_dir }}/kafka"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+  when: kafka.stat.exists == False
+
+- name: edit zookeeper config dataDir
+  lineinfile:
+    path: "{{ home_dir }}/kafka/config/zookeeper.properties"
+    regexp: '^dataDir='
+    line: dataDir={{ home_dir }}/kafka/data/zookeeper
+
+- name: edit server config listeners
+  lineinfile:
+    path: "{{ home_dir }}/kafka/config/server.properties"
+    regexp: '^listeners='
+    line: listeners=PLAINTEXT://127.0.0.1:9092
+
+- name: edit server config log.dirs
+  lineinfile:
+    path: "{{ home_dir }}/kafka/config/server.properties"
+    regexp: '^log.dirs='
+    line: log.dirs={{ home_dir }}/kafka/data/kafka
+
+## CONFIGURE ZOOKEEPER SERVICE
+- name: define service variables
+  set_fact:
+    service_description: "zookeeper"
+    service_user: "{{ ansible_user }}"
+    service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
+    service_workdir: ""
+    service_execstart: "{{ home_dir }}/kafka/bin/zookeeper-server-start.sh {{ home_dir }}/kafka/config/zookeeper.properties"
+    service_execstop: "{{ home_dir }}/kafka/bin/zookeeper-server-stop.sh"
+
+- name: create {{ service_description }} service file
+  template:
+    src: templates/sample.service.j2
+    dest: /etc/systemd/system/{{ service_description }}.service
+
+- name: enable and restart {{ service_description }} service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service_description }}"
+  notify: reboot
+
+## CONFIGURE KAFKA SERVICE
+- name: define service variables
+  set_fact:
+    service_description: "kafka"
+    service_user: "{{ ansible_user }}"
+    service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
+    service_workdir: ""
+    service_execstart: "/bin/sh -c '{{ home_dir }}/kafka/bin/kafka-server-start.sh {{ home_dir }}/kafka/config/server.properties > {{ home_dir }}/kafka/kafka.log 2>&1'"
+    service_execstop: "{{ home_dir }}/kafka/bin/kafka-server-stop.sh"
+
+- name: create {{ service_description }} service file
+  template:
+    src: templates/sample.service.j2
+    dest: /etc/systemd/system/{{ service_description }}.service
+
+- name: enable and restart {{ service_description }} service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service_description }}"
+  notify: reboot
+
+## add kafka to PATH
+- name: Add kafka to system-wide ENVIRONMENT.
+  lineinfile:
+    dest: "{{ home_dir }}/.bashrc"
+    line: 'PATH=$PATH:{{ home_dir }}/kafka/bin'
+  notify: reboot

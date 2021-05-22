@@ -1,0 +1,26 @@
+---
+# SET UP SAMBA #
+###################################################################################################################  
+- name: configure samba
+  lineinfile:
+    dest: /etc/samba/smb.conf
+    line: "{{ item }}"
+  with_items:
+    - '[projects]'
+    - 'path = {{ home_dir }}/projects'
+    - 'writeable=Yes'
+    - 'create mask=0777'
+    - 'directory mask=0777'
+    - 'public=no'
+
+- name: create samba user
+  expect:
+    command: 'smbpasswd -a {{ ansible_user }}'
+    responses:
+        'New SMB password': "{{ default_password }}"
+        'Retype new SMB password': "{{ default_password }}"
+    echo: true
+  no_log: false
+
+- name: restart samba
+  command: 'systemctl restart smbd'

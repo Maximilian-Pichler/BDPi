@@ -1,0 +1,79 @@
+---
+# SET UP DIRECTORIES #
+###################################################################################################################
+- name: create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop:
+    - /usr/local/share/doc
+    - "{{ home_dir }}/tmp"
+    - "{{ home_dir }}/kafka"
+    - "{{ home_dir }}/kafka/data"
+    - "{{ home_dir }}/kafka/data/kafka"
+    - "{{ home_dir }}/kafka/data/zookeeper"
+    - "{{ home_dir }}/spark"
+    - "{{ home_dir }}/projects"
+
+- name: mount external drive
+  lineinfile:
+    dest: /etc/fstab
+    line: "UUID={{ uuid }} {{ home_dir }}/projects {{ ftype }} defaults,auto,users,rw,nofail 0 0"
+  when: (uuid is defined) and (uuid|length > 0)
+
+# OVERCLOCK & OVERVOLT THE RASPBERRY PI CPU#
+###################################################################################################################        
+- name: add overclock if not present
+  lineinfile:
+    dest: /boot/firmware/config.txt
+    line: "{{ item }}"
+  with_items:
+    - arm_freq=2000
+    - over_voltage=6
+  notify: reboot
+
+
+# UPDATE & INSTALL LIBRARIES #
+###################################################################################################################  
+- name: update and upgrade apt packages
+  apt:
+    upgrade: 'yes'
+    update_cache: yes
+    cache_valid_time: 86400 # One day
+
+- name: install prequisite libraries
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - build-essential
+    - make
+    - checkinstall
+    - default-jdk
+    - libssl-dev
+    - libffi-dev
+    - python3-dev
+    - libmariadb3
+    - libmariadb-dev
+    - libsqlite3-dev
+    - libsasl2-dev
+    - libldap2-dev
+    - mariadb-server
+    - python3-pip
+    #- python-pexpect # not available on ubuntu?
+    #- python-mysqldb # not available on ubuntu?
+    #- python-openssl # not available on ubuntu?
+    #- python-websocket # not available on ubuntu?
+    - sqlite3 
+    - git
+    - virtualenv
+    - samba
+    - samba-common-bin
+    - wget
+    - curl
+    - apt-transport-https
+    - ca-certificates
+    - docker.io
