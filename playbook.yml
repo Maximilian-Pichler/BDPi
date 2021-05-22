@@ -36,10 +36,9 @@
         line: "UUID={{ uuid }} {{ home_dir }}/projects {{ ftype }} defaults,auto,users,rw,nofail 0 0"
       when: (uuid is defined) and (uuid|length > 0)
 
-
-    # OVERCLOCK #
+    # OVERCLOCK & OVERVOLT THE RASPBERRY PI CPU#
     ###################################################################################################################        
-    - name: add overclock if not set
+    - name: add overclock if not present
       lineinfile:
         dest: /boot/firmware/config.txt
         line: "{{ item }}"
@@ -67,13 +66,13 @@
         - make
         - checkinstall
         - default-jdk
-        - libssl-dev 
-        - libffi-dev 
+        - libssl-dev
+        - libffi-dev
         - python3-dev
         - libmariadb3
         - libmariadb-dev
         - libsqlite3-dev
-        - libsasl2-dev 
+        - libsasl2-dev
         - libldap2-dev
         - mariadb-server
         - python3-pip
@@ -234,7 +233,7 @@
         executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
         state: latest
 
-    - name: install other pip-packages
+    - name: install pip-packages (not present on conda-forge)
       pip:
         name: 
           - python-binance
@@ -246,8 +245,32 @@
         path: "/tmp/requirements.txt"
         state: absent
 
+    ## CONFIGURE JUPYTER SERVICE
+    - name: define service variables
+      set_fact:
+        service_description: "jupyter"
+        service_user: "{{ ansible_user }}"
+        service_environment: ""
+        service_workdir: "{{ home_dir }}/projects"
+        service_execstart: "{{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ ansible_default_ipv4.address }} --port=8881 --NotebookApp.token={{ default_password }} --notebook-dir={{ home_dir }}/"
+        service_execstop: ""
+    
+    - name: create {{ service_description }} service file
+      template:
+        src: templates/sample.service.j2
+        dest: /etc/systemd/system/{{ service_description }}.service
+    
+    - name: enable and restart {{ service_description }} service
+      systemd:
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
+        name: "{{ service_description }}"
+      notify: reboot
 
-    ## SETUP MARIA-DB
+
+    # SETUP MARIA-DB #
+    ################################################################################################################### 
     - name: install PyMySQL
       command: /usr/bin/pip3 install PyMySQL
 
@@ -280,7 +303,8 @@
         line: '#bind-address = 127.0.0.1'
       
 
-    ## SETUP KAFKA
+    # SETUP KAFKA #
+    ################################################################################################################### 
     - name: check if kafka folder is present
       stat: path="{{ home_dir }}/kafka/bin"
       register: kafka
@@ -357,7 +381,16 @@
         name: "{{ service_description }}"
       notify: reboot
 
-    ## SPARK
+    ## add kafka to PATH
+    - name: Add kafka to system-wide ENVIRONMENT.
+      lineinfile:
+        dest: "{{ home_dir }}/.bashrc"
+        line: 'PATH=$PATH:{{ home_dir }}/kafka/bin'
+      notify: reboot
+
+
+    # SPARK #
+    ################################################################################################################### 
     - name: check if spark folder is present
       stat: path="{{ home_dir }}/spark/bin"
       register: spark
@@ -370,31 +403,23 @@
         extra_opts: [--strip-components=1]
       when: spark.stat.exists == False
 
-
-    ### CONFIGURE JUPYTER SERVICE
-    - name: define service variables
-      set_fact:
-        service_description: "jupyter"
-        service_user: "{{ ansible_user }}"
-        service_environment: '"PATH={{ ansible_env.PATH }}:{{ home_dir }}/archiconda3/envs/streaming/bin:" "SPARK_HOME={{ home_dir }}/spark"'
-        service_workdir: "{{ home_dir }}/projects"
-        service_execstart: "{{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ ansible_default_ipv4.address }} --port=8881 --NotebookApp.token={{ default_password }} --notebook-dir={{ home_dir }}/projects"
-        service_execstop: ""
-    
-    - name: create {{ service_description }} service file
-      template:
-        src: templates/sample.service.j2
-        dest: /etc/systemd/system/{{ service_description }}.service
-    
-    - name: enable and restart {{ service_description }} service
-      systemd:
-        state: restarted
-        enabled: yes
-        daemon_reload: yes
-        name: "{{ service_description }}"
+    ## add Spark to PATH 
+    - name: Add spark to system-wide ENVIRONMENT.
+      lineinfile:
+        dest: "{{ home_dir }}/.bashrc"
+        line: 'PATH=$PATH:{{ home_dir }}/spark/bin'
       notify: reboot
 
-    ## INSTALL SUPERSET
+    ## add SPARK_HOME to jupyter ENVIRONMENT
+    - name: enable remote login
+      lineinfile:
+        path: /etc/systemd/system/jupyter.service
+        regexp: '^Environment='
+        line: Environment="SPARK_HOME={{ home_dir }}/spark"
+
+
+    # INSTALL SUPERSET #
+    ################################################################################################################### 
     - name: check if superset environment is present
       stat: path={{ home_dir }}/archiconda3/envs/superset/bin/python
       register: superset
@@ -439,7 +464,7 @@
         - PyJWT
         - apache-superset
 
-    ### SETUP SUPERSET USERS
+    ## SETUP SUPERSET USERS
     - name: setup superset
       become: yes
       become_user: '{{ ansible_user }}'
@@ -485,10 +510,6 @@
       notify: reboot
 
 
-    # FINAL REBOOT #
-    ################################################################################################################### 
-    - name: final reboot
-      reboot:
 
 
 

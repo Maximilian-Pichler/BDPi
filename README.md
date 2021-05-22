@@ -22,10 +22,11 @@ This Ansible-Playbook installs and configures the following technologies:
 ---
 
 ## HOW TO USE IT
+
 ### Prerequisites:
-- a Raspberry Pi 4/400
+- a Raspberry Pi 4/400 (4gb+ RAM)
 - a USB-C power supply
-- an SD Card
+- a boot drive (SD card or [USB 3.0 stick](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
 - admin access to your router
 - recommended: a LAN-cable to connect to the router
 
@@ -40,7 +41,8 @@ This Ansible-Playbook installs and configures the following technologies:
 - open the `hosts.ini` file and put the IP-Adress of your RPi in the second line.
 - if you use additional storage, add the UUID and the Format-Type of your drive here too, otherwise leave these strings empty.
 - execute `ansible-playbook playbook.yml` from the BDPi-Repository folder on your control machine.
-- get something to drink...or eat. This will take a while.
+- get something to drink...or eat. This will take a while.*
+    - *The time it takes to run the playbook heavily depends on your boot drive. A USB 3.0 stick is the preferred choice and reduces the time needed to approx. 45min*
 
 ## Have Fun
 Once the installation is finished, the services are listening on the following ports:
@@ -59,16 +61,13 @@ From a security standpoint this configuration is not ideal, but makes things eas
 ---
 
 ## WHY ANSIBLE?
-- because I was intrigued after reading about it. ([Deploy a Kafka Cluster with Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb) | [short introduction video](https://www.ansible.com/resources/videos/quick-start-video))
-- because I mess things up: automation makes starting from scratch less painful.
-- because I'm lazy: Ansible-Playbooks are easy-to-read/understand and reduce the need for documentation.
+- Because I wanted to learn it after reading about its capabilities. ([Deploy a Kafka Cluster with Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb) | [short introduction video](https://www.ansible.com/resources/videos/quick-start-video))
+- Because I mess things up and automation makes starting from scratch less painful.
+- Because I'm lazy. Ansible-Playbooks are easy-to-read/understand and reduce the need for documentation.
 
 ---
 
 ## UPCOMING FEATURES (maybe)
-
+- *Continuous Integration Workflow on selfhosted GitLab*
 - *Spark Cluster Integration*
-- *BDPi on AWS*
 - *VPN for remote access*
-- *more operating systems (CentOS, Debian)*
-- *more processor architectures (x64, armhf)*
