@@ -20,7 +20,7 @@
 - name: mount external drive
   lineinfile:
     dest: /etc/fstab
-    line: "UUID={{ uuid }} {{ home_dir }}/projects {{ ftype }} defaults,auto,users,rw,nofail 0 0"
+    line: "UUID={{ uuid }} {{ home_dir }}/projects {{ ftype }} defaults,auto,rw,exec,nofail 0 0"
   when: (uuid is defined) and (uuid|length > 0)
 
 # OVERCLOCK & OVERVOLT THE RASPBERRY PI CPU#

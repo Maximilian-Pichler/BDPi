@@ -1,5 +1,5 @@
 # BIG DATA Pi 
-This project is inspired by the [Open Source Big Data Toolbelt (OSBDET)](https://github.com/raulmarinperez/osbdet) by Raúl Marín ([LinkedIn](https://github.com/raulmarinperez) | [GitHub](https://www.linkedin.com/in/raulmarinperez/)) and provides an educational platform for Big Data on the Raspberry Pi (RPi).
+This project is inspired by Raúl Marín's ([LinkedIn](https://github.com/raulmarinperez) | [GitHub](https://www.linkedin.com/in/raulmarinperez/)) project [Open Source Big Data Toolbelt (OSBDET)](https://github.com/raulmarinperez/osbdet) and provides an educational platform for Big Data technologies on the Raspberry Pi (RPi).
 
 
 ![](/assets/raspberry-pi-4.png)
@@ -12,10 +12,10 @@ The newest version of the small single-board computer - the Raspberry Pi 4 B - i
 ## Technologies
 This Ansible-Playbook installs and configures the following technologies:
 - Archiconda3 [(conda on 64bit arm)](https://github.com/Archiconda)
-- Jupyter Lab [(next gen coding interface)](https://jupyterlab.readthedocs.io/en/stable/)
 - Apache Kafka [(message broker & storage)](https://kafka.apache.org/)
 - Apache Spark [(stream processing)](https://spark.apache.org/)
 - Apache Superset [(visualization)](https://superset.apache.org/)
+- Jupyter Lab [(next gen coding interface)](https://jupyterlab.readthedocs.io/en/stable/)
 - MariaDB [(storage)](https://mariadb.org/)
 - Samba [(network file service)](https://www.samba.org/)
 
@@ -24,9 +24,9 @@ This Ansible-Playbook installs and configures the following technologies:
 ## HOW TO USE IT
 
 ### Prerequisites:
-- a Raspberry Pi 4/400 (4gb+ RAM)
+- a Raspberry Pi 4/400 (4Gb+)
 - a USB-C power supply
-- a boot drive (SD card or [USB 3.0 stick](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
+- a boot drive (SD card or [USB 3 stick](https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/msd.md))
 - admin access to your router
 - recommended: a LAN-cable to connect to the router
 
@@ -42,7 +42,7 @@ This Ansible-Playbook installs and configures the following technologies:
 - if you use additional storage, add the UUID and the Format-Type of your drive here too, otherwise leave these strings empty.
 - execute `ansible-playbook playbook.yml` from the BDPi-Repository folder on your control machine.
 - get something to drink...or eat. This will take a while.*
-    - *The time it takes to run the playbook heavily depends on your boot drive. A USB 3.0 stick is the preferred choice and reduces the time needed to approx. 45min*
+    - *The time it takes to run the playbook heavily depends on your boot drive. A USB 3 stick is the preferred choice and reduces the time needed to approx. 45min*
 
 ## Have Fun
 Once the installation is finished, the services are listening on the following ports:
