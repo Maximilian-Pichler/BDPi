@@ -58,16 +58,18 @@
     - python3-dev
     - libmariadb3
     - libmariadb-dev
+    - libmariadb-java
     - libsqlite3-dev
     - libsasl2-dev
     - libldap2-dev
     - mariadb-server
+    - sqlite3    
     - python3-pip
     #- python-pexpect # not available on ubuntu?
     #- python-mysqldb # not available on ubuntu?
     #- python-openssl # not available on ubuntu?
     #- python-websocket # not available on ubuntu?
-    - sqlite3 
+
     - git
     - virtualenv
     - samba
