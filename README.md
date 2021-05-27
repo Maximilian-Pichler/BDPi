@@ -2,7 +2,7 @@
 This project is inspired by Raúl Marín's ([LinkedIn](https://github.com/raulmarinperez) | [GitHub](https://www.linkedin.com/in/raulmarinperez/)) project [Open Source Big Data Toolbelt (OSBDET)](https://github.com/raulmarinperez/osbdet) and provides an educational platform for Big Data technologies on the Raspberry Pi (RPi).
 
 
-![](/assets/raspberry-pi-4.png)
+![](/images/raspberry-pi-4.png)
 
 
 The newest version of the small single-board computer - the Raspberry Pi 4 B - is equipped with a faster processor and more RAM than its predecessors. This allows users to run more demanding applications while still benefitting from the energy efficiency of the ARM-Architecture. The RPi only uses 6.4W under full load, which is ~1/10 of a traditional light-bulb. 
