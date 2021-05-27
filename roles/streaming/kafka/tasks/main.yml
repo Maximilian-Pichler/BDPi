@@ -34,11 +34,13 @@
 - name: define service variables
   set_fact:
     service_description: "zookeeper"
+    service_after: "syslog.target network.target"
     service_user: "{{ ansible_user }}"
     service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
     service_workdir: ""
     service_execstart: "{{ home_dir }}/kafka/bin/zookeeper-server-start.sh {{ home_dir }}/kafka/config/zookeeper.properties"
     service_execstop: "{{ home_dir }}/kafka/bin/zookeeper-server-stop.sh"
+    service_restart: "on-failure"
 
 - name: create {{ service_description }} service file
   template:
@@ -57,11 +59,13 @@
 - name: define service variables
   set_fact:
     service_description: "kafka"
+    service_after: "syslog.target network.target"
     service_user: "{{ ansible_user }}"
     service_environment: "KAFKA_HOME={{ home_dir }}/kafka"
     service_workdir: ""
     service_execstart: "/bin/sh -c '{{ home_dir }}/kafka/bin/kafka-server-start.sh {{ home_dir }}/kafka/config/server.properties > {{ home_dir }}/kafka/kafka.log 2>&1'"
     service_execstop: "{{ home_dir }}/kafka/bin/kafka-server-stop.sh"
+    service_restart: "on-failure"
 
 - name: create {{ service_description }} service file
   template:

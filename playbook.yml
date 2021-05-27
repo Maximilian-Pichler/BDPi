@@ -19,4 +19,6 @@
     - role: streaming/spark
     - role: streaming/mariadb
     - role: streaming/superset
+    - role: demo
     - role: postrequisites
+    

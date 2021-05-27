@@ -6,7 +6,6 @@ jupyter
 jupyterlab
 findspark
 SQLAlchemy
-mysqlclient
 PyMySQL
 websocket-client
-jupyter-archive
+

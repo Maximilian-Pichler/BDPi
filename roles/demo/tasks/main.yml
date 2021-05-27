@@ -1,0 +1,66 @@
+---
+# DEMO SETUP #
+###################################################################################################################  
+## COPY DEMO FOLDER
+- name: Copy file with owner and permissions
+  copy:
+    src: templates/demo
+    dest: "{{ home_dir }}/projects/demo"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0773'
+
+
+## CONFIGURE SERVICE FILES
+### PRODUCER
+- name: define service variables
+  set_fact:
+    service_description: "superset_crypto_producer"
+    service_after: "network.target zookeeper.service kafka.service jupyter.service mariadb.service"
+    service_user: "{{ ansible_user }}"
+    service_environment: ""
+    service_workdir: ""
+    service_execstart: "/home/ubuntu/archiconda3/envs/streaming/bin/python3 /home/ubuntu/projects/demo/producer.py >/dev/null 2>&1"
+    service_execstop: ""
+    service_restart: "on-failure"
+
+- name: create {{ service_description }} service file
+  template:
+    src: templates/sample.service.j2
+    dest: /etc/systemd/system/{{ service_description }}.service
+
+- name: enable and restart {{ service_description }} service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service_description }}"
+  notify: reboot
+
+
+### CONSUMER
+- name: define service variables
+  set_fact:
+    service_description: "superset_crypto_consumer"
+    service_after: "network.target zookeeper.service kafka.service jupyter.service mariadb.service superset_crypto_producer.service"
+    service_user: "{{ ansible_user }}"
+    service_environment: ""
+    service_workdir: ""
+    service_execstart: "/home/ubuntu/archiconda3/envs/streaming/bin/python3 /home/ubuntu/projects/demo/consumer.py >/dev/null 2>&1"
+    service_execstop: ""
+
+- name: create {{ service_description }} service file
+  template:
+    src: templates/sample.service.j2
+    dest: /etc/systemd/system/{{ service_description }}.service
+
+- name: enable and restart {{ service_description }} service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: "{{ service_description }}"
+  notify: reboot
+
+
+## RESTART (handled automatically)

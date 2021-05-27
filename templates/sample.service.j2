@@ -1,6 +1,6 @@
 [Unit]
 Description= {{ service_description }}
-After=syslog.target network.target
+After={{ service_after }} # <- template version 2.0
 
 [Service]
 Restart=always
@@ -11,7 +11,7 @@ WorkDirectory= {{ service_workdir }}
 ExecStart= {{ service_execstart }}
 ExecStop= {{ service_execstop }}
 
-Restart=on-failure
+Restart= {{ service_restart }}
 RestartSec=10
 
 [Install]

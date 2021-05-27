@@ -1,0 +1,255 @@
+{
+    "dashboards": [
+        {
+            "__Dashboard__": {
+                "css": "",
+                "dashboard_title": "CryptoCoins",
+                "description": null,
+                "json_metadata": "{\"timed_refresh_immune_slices\": [], \"expanded_slices\": {}, \"refresh_frequency\": 60, \"default_filters\": \"{}\", \"color_scheme\": \"echarts5Colors\", \"label_colors\": {\"ADAEUR\": \"#5470C6\", \"BNBEUR\": \"#91CC75\", \"DOTEUR\": \"#FAC858\", \"LINKEUR\": \"#EE6666\", \"MATICEUR\": \"#73C0DE\", \"AVG(price)\": \"#5470C6\", \"BTCEUR\": \"#91CC75\", \"DOGEEUR\": \"#FAC858\", \"ETHEUR\": \"#EE6666\"}, \"remote_id\": 1}",
+                "position_json": "{\"CHART-74oWMdJixd\":{\"children\":[],\"id\":\"CHART-74oWMdJixd\",\"meta\":{\"chartId\":1,\"height\":50,\"sliceName\":\"Doge price seconds\",\"uuid\":\"11b83b76-138a-45a8-965d-65a0bf479002\",\"width\":4},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\",\"TAB-hXFXpv7lV\",\"ROW-4q2lXvoZp\"],\"type\":\"CHART\"},\"CHART-8CYG487YhN\":{\"children\":[],\"id\":\"CHART-8CYG487YhN\",\"meta\":{\"chartId\":2,\"height\":68,\"sliceName\":\"Change\",\"uuid\":\"d4eaed03-7409-44ac-b998-7c9c04ef6d1f\",\"width\":12},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\",\"TAB-p7XlKmbB1h\",\"ROW-2oMrS64h8\"],\"type\":\"CHART\"},\"DASHBOARD_VERSION_KEY\":\"v2\",\"GRID_ID\":{\"children\":[\"HEADER-tJSE_-LCpB\",\"TABS-GSxefypiTK\"],\"id\":\"GRID_ID\",\"parents\":[\"ROOT_ID\"],\"type\":\"GRID\"},\"HEADER-tJSE_-LCpB\":{\"children\":[],\"id\":\"HEADER-tJSE_-LCpB\",\"meta\":{\"background\":\"BACKGROUND_TRANSPARENT\",\"headerSize\":\"LARGE_HEADER\",\"text\":\"Crypto Dashboard\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\"],\"type\":\"HEADER\"},\"HEADER_ID\":{\"id\":\"HEADER_ID\",\"meta\":{\"text\":\"Doge\"},\"type\":\"HEADER\"},\"ROOT_ID\":{\"children\":[\"GRID_ID\"],\"id\":\"ROOT_ID\",\"type\":\"ROOT\"},\"ROW-2oMrS64h8\":{\"children\":[\"CHART-8CYG487YhN\"],\"id\":\"ROW-2oMrS64h8\",\"meta\":{\"background\":\"BACKGROUND_TRANSPARENT\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\",\"TAB-p7XlKmbB1h\"],\"type\":\"ROW\"},\"ROW-4q2lXvoZp\":{\"children\":[\"CHART-74oWMdJixd\"],\"id\":\"ROW-4q2lXvoZp\",\"meta\":{\"background\":\"BACKGROUND_TRANSPARENT\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\",\"TAB-hXFXpv7lV\"],\"type\":\"ROW\"},\"TAB-_OKXDRwJb\":{\"children\":[],\"id\":\"TAB-_OKXDRwJb\",\"meta\":{\"defaultText\":\"Tab title\",\"placeholder\":\"Tab title\",\"text\":\"ETH\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\"],\"type\":\"TAB\"},\"TAB-hXFXpv7lV\":{\"children\":[\"ROW-4q2lXvoZp\"],\"id\":\"TAB-hXFXpv7lV\",\"meta\":{\"defaultText\":\"Tab title\",\"placeholder\":\"Tab title\",\"text\":\"DOGE\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\"],\"type\":\"TAB\"},\"TAB-lSoRouxGU\":{\"children\":[],\"id\":\"TAB-lSoRouxGU\",\"meta\":{\"defaultText\":\"Tab title\",\"placeholder\":\"Tab title\",\"text\":\"BTC\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\"],\"type\":\"TAB\"},\"TAB-p7XlKmbB1h\":{\"children\":[\"ROW-2oMrS64h8\"],\"id\":\"TAB-p7XlKmbB1h\",\"meta\":{\"defaultText\":\"Tab title\",\"placeholder\":\"Tab title\",\"text\":\"Overview\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\"],\"type\":\"TAB\"},\"TAB-t1CgO6_Ie\":{\"children\":[],\"id\":\"TAB-t1CgO6_Ie\",\"meta\":{\"defaultText\":\"Tab title\",\"placeholder\":\"Tab title\",\"text\":\"MATIC\"},\"parents\":[\"ROOT_ID\",\"GRID_ID\",\"TABS-GSxefypiTK\"],\"type\":\"TAB\"},\"TABS-GSxefypiTK\":{\"children\":[\"TAB-p7XlKmbB1h\",\"TAB-lSoRouxGU\",\"TAB-_OKXDRwJb\",\"TAB-hXFXpv7lV\",\"TAB-t1CgO6_Ie\"],\"id\":\"TABS-GSxefypiTK\",\"meta\":{},\"parents\":[\"ROOT_ID\",\"GRID_ID\"],\"type\":\"TABS\"}}",
+                "slices": [
+                    {
+                        "__Slice__": {
+                            "cache_timeout": null,
+                            "datasource_name": "crypto.test2",
+                            "datasource_type": "table",
+                            "id": 1,
+                            "params": "{\"adhoc_filters\": [], \"annotation_layers\": [], \"color_scheme\": \"supersetColors\", \"datasource\": \"4__table\", \"forecastInterval\": 0.8, \"forecastPeriods\": 10, \"granularity_sqla\": \"Datetime\", \"groupby\": [], \"label_colors\": {}, \"legendOrientation\": \"top\", \"legendType\": \"scroll\", \"markerSize\": 6, \"metrics\": [{\"aggregate\": \"AVG\", \"column\": {\"column_name\": \"price\", \"description\": null, \"expression\": null, \"filterable\": true, \"groupby\": true, \"id\": 12, \"is_dttm\": false, \"python_date_format\": null, \"type\": \"BLOB\", \"verbose_name\": null}, \"expressionType\": \"SIMPLE\", \"hasCustomLabel\": false, \"isNew\": false, \"label\": \"AVG(price)\", \"optionName\": \"metric_1583h8wmu14_rkt5kgy0ek\", \"sqlExpression\": null}], \"opacity\": 0.2, \"order_desc\": true, \"rich_tooltip\": true, \"row_limit\": 10000, \"seriesType\": \"line\", \"slice_id\": 1, \"time_grain_sqla\": \"PT1S\", \"time_range\": \"No filter\", \"time_range_endpoints\": [\"inclusive\", \"exclusive\"], \"truncateYAxis\": true, \"url_params\": {}, \"viz_type\": \"echarts_timeseries\", \"xAxisLabelRotation\": 45, \"xAxisShowMaxLabel\": true, \"xAxisShowMinLabel\": true, \"x_axis_time_format\": \"smart_date\", \"y_axis_bounds\": [null, null], \"y_axis_format\": \"SMART_NUMBER\", \"remote_id\": 1, \"datasource_name\": \"test2\", \"schema\": \"crypto\", \"database_name\": \"crypto\"}",
+                            "slice_name": "Doge price seconds",
+                            "viz_type": "echarts_timeseries"
+                        }
+                    },
+                    {
+                        "__Slice__": {
+                            "cache_timeout": null,
+                            "datasource_name": "crypto.test3",
+                            "datasource_type": "table",
+                            "id": 2,
+                            "params": "{\"adhoc_filters\": [{\"clause\": \"WHERE\", \"comparator\": \"LINKEUR\", \"expressionType\": \"SIMPLE\", \"filterOptionName\": \"filter_za5mox1li7_3hwxzykszpb\", \"isExtra\": false, \"isNew\": false, \"operator\": \"!=\", \"sqlExpression\": null, \"subject\": \"symbol\"}], \"annotation_layers\": [], \"bottom_margin\": \"auto\", \"color_scheme\": \"echarts5Colors\", \"comparison_type\": \"values\", \"datasource\": \"5__table\", \"granularity_sqla\": \"Datetime\", \"groupby\": [\"symbol\"], \"label_colors\": {\"ADAEUR\": \"#5470C6\", \"AVG(price)\": \"#5470C6\", \"BNBEUR\": \"#91CC75\", \"BTCEUR\": \"#91CC75\", \"DOGEEUR\": \"#FAC858\", \"DOTEUR\": \"#FAC858\", \"ETHEUR\": \"#EE6666\", \"LINKEUR\": \"#EE6666\", \"MATICEUR\": \"#73C0DE\"}, \"left_margin\": \"auto\", \"limit\": 50, \"metrics\": [{\"aggregate\": \"AVG\", \"column\": {\"column_name\": \"price\", \"description\": null, \"expression\": null, \"filterable\": true, \"groupby\": true, \"id\": 15, \"is_dttm\": false, \"python_date_format\": null, \"type\": \"BLOB\", \"verbose_name\": null}, \"expressionType\": \"SIMPLE\", \"hasCustomLabel\": false, \"isNew\": false, \"label\": \"AVG(price)\", \"optionName\": \"metric_l6wqs6xw63_camezvqpmdc\", \"sqlExpression\": null}], \"order_desc\": true, \"rolling_type\": \"None\", \"row_limit\": null, \"slice_id\": 2, \"time_grain_sqla\": \"PT1M\", \"time_range\": \"2021-05-24 18:50 : \", \"time_range_endpoints\": [\"inclusive\", \"exclusive\"], \"url_params\": {}, \"viz_type\": \"compare\", \"x_axis_format\": \"smart_date\", \"x_axis_showminmax\": true, \"x_ticks_layout\": \"auto\", \"y_axis_bounds\": [null, null], \"y_axis_format\": \"SMART_NUMBER\", \"y_axis_showminmax\": true, \"y_log_scale\": false, \"remote_id\": 2, \"datasource_name\": \"test3\", \"schema\": \"crypto\", \"database_name\": \"crypto\"}",
+                            "slice_name": "Change",
+                            "viz_type": "compare"
+                        }
+                    }
+                ],
+                "slug": null
+            }
+        }
+    ],
+    "datasources": [
+        {
+            "__SqlaTable__": {
+                "cache_timeout": null,
+                "columns": [
+                    {
+                        "__TableColumn__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "column_name": "Datetime",
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "description": null,
+                            "expression": null,
+                            "filterable": true,
+                            "groupby": true,
+                            "id": 11,
+                            "is_active": true,
+                            "is_dttm": true,
+                            "python_date_format": null,
+                            "table_id": 4,
+                            "type": "DATETIME",
+                            "uuid": "84bcfbd6-062f-4659-8099-3dacbac26711",
+                            "verbose_name": null
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "column_name": "price",
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "description": null,
+                            "expression": null,
+                            "filterable": true,
+                            "groupby": true,
+                            "id": 12,
+                            "is_active": true,
+                            "is_dttm": false,
+                            "python_date_format": null,
+                            "table_id": 4,
+                            "type": "BLOB",
+                            "uuid": "dff36873-7859-4cdd-afec-99b24cfdae22",
+                            "verbose_name": null
+                        }
+                    }
+                ],
+                "database_id": 1,
+                "default_endpoint": null,
+                "description": null,
+                "extra": null,
+                "fetch_values_predicate": null,
+                "filter_select_enabled": false,
+                "main_dttm_col": null,
+                "metrics": [
+                    {
+                        "__SqlMetric__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T17:41:12"
+                            },
+                            "d3format": null,
+                            "description": null,
+                            "expression": "count(*)",
+                            "extra": null,
+                            "id": 4,
+                            "metric_name": "count",
+                            "metric_type": null,
+                            "table_id": 4,
+                            "uuid": "77f0e0cb-f501-401b-90de-85c8a1386e28",
+                            "verbose_name": null,
+                            "warning_text": null
+                        }
+                    }
+                ],
+                "offset": 0,
+                "params": "{\"remote_id\": 4, \"database_name\": \"crypto\"}",
+                "schema": "crypto",
+                "sql": "select distinct FROM_UNIXTIME(trade_time / 1000) as Datetime, price from trades\nwhere symbol = \"DOGEEUR\"",
+                "table_name": "test2",
+                "template_params": null
+            }
+        },
+        {
+            "__SqlaTable__": {
+                "cache_timeout": null,
+                "columns": [
+                    {
+                        "__TableColumn__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "column_name": "Datetime",
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "description": null,
+                            "expression": null,
+                            "filterable": true,
+                            "groupby": true,
+                            "id": 13,
+                            "is_active": true,
+                            "is_dttm": true,
+                            "python_date_format": null,
+                            "table_id": 5,
+                            "type": "DATETIME",
+                            "uuid": "8a22251a-509c-4fc7-882d-540a82c14ccc",
+                            "verbose_name": null
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "column_name": "symbol",
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "description": null,
+                            "expression": null,
+                            "filterable": true,
+                            "groupby": true,
+                            "id": 14,
+                            "is_active": true,
+                            "is_dttm": false,
+                            "python_date_format": null,
+                            "table_id": 5,
+                            "type": "BLOB",
+                            "uuid": "bddd719e-91f6-4665-ab09-ea484d8cb38a",
+                            "verbose_name": null
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "column_name": "price",
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "description": null,
+                            "expression": null,
+                            "filterable": true,
+                            "groupby": true,
+                            "id": 15,
+                            "is_active": true,
+                            "is_dttm": false,
+                            "python_date_format": null,
+                            "table_id": 5,
+                            "type": "BLOB",
+                            "uuid": "d80987be-ead4-459d-9a20-e00b9a7d0ac1",
+                            "verbose_name": null
+                        }
+                    }
+                ],
+                "database_id": 1,
+                "default_endpoint": null,
+                "description": null,
+                "extra": null,
+                "fetch_values_predicate": null,
+                "filter_select_enabled": false,
+                "main_dttm_col": null,
+                "metrics": [
+                    {
+                        "__SqlMetric__": {
+                            "changed_by_fk": 1,
+                            "changed_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "created_by_fk": 1,
+                            "created_on": {
+                                "__datetime__": "2021-05-24T18:16:49"
+                            },
+                            "d3format": null,
+                            "description": null,
+                            "expression": "count(*)",
+                            "extra": null,
+                            "id": 5,
+                            "metric_name": "count",
+                            "metric_type": null,
+                            "table_id": 5,
+                            "uuid": "f0e84b54-99e8-479f-8ea4-adcc823d390d",
+                            "verbose_name": null,
+                            "warning_text": null
+                        }
+                    }
+                ],
+                "offset": 0,
+                "params": "{\"remote_id\": 5, \"database_name\": \"crypto\"}",
+                "schema": "crypto",
+                "sql": "select distinct FROM_UNIXTIME(trade_time / 1000) as Datetime, symbol, price from trades",
+                "table_name": "test3",
+                "template_params": null
+            }
+        }
+    ]
+}

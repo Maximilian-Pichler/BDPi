@@ -25,6 +25,17 @@
   when: conda.stat.exists == False
   no_log: false
 
+- name: set "{{ ansible_user }}" as owner
+  file: 
+    dest: "{{ home_dir }}/archiconda3"
+    owner: "{{ ansible_user }}" 
+    group: "{{ ansible_user }}" 
+    recurse: yes
+  notify: reboot
+
+- name: update Archiconda3
+  command: "{{ home_dir }}/archiconda3/bin/conda update -y --all"
+
 - name: add archiconda binary to path
   lineinfile:
     dest: "{{ home_dir }}/.bashrc"

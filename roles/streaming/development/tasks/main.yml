@@ -67,9 +67,10 @@
     mode: '0775'
     backup: no
 
+# TODO split env creation and requirements installation into seperate tasks
 - name: setup streaming conda-env
   expect:
-    command: "{{ home_dir }}/archiconda3/bin/conda env create --name streaming python=3.7.1 --file {{ home_dir }}/tmp/requirements.txt"
+    command: "{{ home_dir }}/archiconda3/bin/conda env create --name streaming python=3.7 --file {{ home_dir }}/tmp/requirements.txt"
     responses:
         'Proceed': 'y'
     echo: true
@@ -83,6 +84,7 @@
     executable: "{{ home_dir }}/archiconda3/envs/streaming/bin/pip"
     state: latest
 
+# TODO put pip packages in requirements file
 - name: install pip-packages (not present on conda-forge)
   pip:
     name: 
@@ -99,11 +101,13 @@
 - name: define service variables
   set_fact:
     service_description: "jupyter"
+    service_after: "syslog.target network.target"
     service_user: "{{ ansible_user }}"
     service_environment: ""
     service_workdir: "{{ home_dir }}/projects"
     service_execstart: "{{ home_dir }}/archiconda3/envs/streaming/bin/jupyter lab --ip={{ ansible_default_ipv4.address }} --port=8881 --NotebookApp.token={{ default_password }} --notebook-dir={{ home_dir }}/"
     service_execstop: ""
+    service_restart: "on-failure"
 
 - name: create {{ service_description }} service file
   template:

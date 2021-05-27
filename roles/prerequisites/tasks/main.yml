@@ -69,7 +69,6 @@
     #- python-mysqldb # not available on ubuntu?
     #- python-openssl # not available on ubuntu?
     #- python-websocket # not available on ubuntu?
-
     - git
     - virtualenv
     - samba
@@ -78,4 +77,3 @@
     - curl
     - apt-transport-https
     - ca-certificates
-    - docker.io
