@@ -83,10 +83,11 @@ If you want to see how the demo works, you can find the according files in the f
 
 Finally, if you want to disable the auto start of the demo, then enter the following two command lines:
 
-`systemctl disable superset_crypto_consumer && systemctl stop superset_crypto_consumer`
+```
+systemctl disable superset_crypto_consumer && systemctl stop superset_crypto_consumer
 
-`systemctl disable superset_crypto_producer && systemctl stop superset_crypto_producer`
-
+systemctl disable superset_crypto_producer && systemctl stop superset_crypto_producer
+```
 
 ---
 
