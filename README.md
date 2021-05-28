@@ -40,6 +40,7 @@ This Ansible-Playbook installs and configures the following technologies:
 - download this repository to your control machine with `git clone https://github.com/Maximilian-Pichler/BDPi`
 - open the `hosts.ini` file and put the IP-Adress of your RPi in the second line.
 - if you use additional storage, add the UUID and the Format-Type of your drive here too, otherwise leave these strings empty.
+- if you don't want to install the E2E-demo, then go to `ansible-playbook playbook.yml` and delete the line `- role: demo`
 - execute `ansible-playbook playbook.yml` from the BDPi-Repository folder on your control machine.
 - get something to drink...or eat. This will take a while.*
     - *The time it takes to run the playbook heavily depends on your boot drive. A USB 3 stick is the preferred choice and reduces the time needed to approx. 45min*
@@ -64,6 +65,21 @@ From a security standpoint this configuration is not ideal, but makes things eas
 - Because I wanted to learn it after reading about its capabilities. ([Deploy a Kafka Cluster with Ansible](https://towardsdatascience.com/deploy-a-kafka-cluster-with-terraform-and-ansible-21bee1ee4fb) | [short introduction video](https://www.ansible.com/resources/videos/quick-start-video))
 - Because I mess things up and automation makes starting from scratch less painful.
 - Because I'm lazy. Ansible-Playbooks are easy-to-read/understand and reduce the need for documentation.
+
+---
+
+## Demo
+In case you installed the demo, you can now open superset by typing <raspberry pi ip adress>:8088 into the browser of your choice.
+Then add a new database connection with the following URI: `mysql://ubuntu:abcd@localhost:3306/crypto`. 
+
+![](/images/add_database.png)
+![](/images/database_uri.png)
+
+Then import the dashboard-file from the git repository folder `templates/demosuperset_crypto.json`.
+Once this is done, you can access the dashboard.
+![](/images/dashboard.png)
+
+If you want to see how the demo works, you can find the according files in the folder `~/projects/demo/`
 
 ---
 

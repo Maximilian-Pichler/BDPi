@@ -10,6 +10,13 @@
     group: "{{ ansible_user }}"
     mode: '0773'
 
+## CREATE CRYPTO DATABASE
+- name: create crypto database
+  community.mysql.mysql_db:
+    login_user: "{{ ansible_user }}"
+    login_password: "{{ default_password }}"
+    name: crypto
+    state: present
 
 ## CONFIGURE SERVICE FILES
 ### PRODUCER
