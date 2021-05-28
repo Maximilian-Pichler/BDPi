@@ -5,7 +5,7 @@ Once you are logged in you can add a new database connection with the following 
 ![](/images/add_database.png)
 ![](/images/database_uri.png)
 
-Then import the dashboard-file from the git repository folder `templates/demosuperset_crypto.json`.
+Then import the dashboard-file from the git repository folder `templates/demo/superset_crypto.json`.
 Now you can access the dashboard.
 ![](/images/dashboard.png)
 
