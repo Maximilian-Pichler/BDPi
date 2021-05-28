@@ -69,17 +69,23 @@ From a security standpoint this configuration is not ideal, but makes things eas
 ---
 
 ## Demo
-In case you installed the demo, you can now open superset by typing <raspberry pi ip adress>:8088 into the browser of your choice.
-Then add a new database connection with the following URI: `mysql://ubuntu:abcd@localhost:3306/crypto`. 
+In case you installed the demo, you can now open superset by typing `<raspberry-pi-ip-adress>:8088` into the browser of your choice. 
+Once you are logged in you can add a new database connection with the following URI: `mysql://ubuntu:abcd@localhost:3306/crypto`. 
 
 ![](/images/add_database.png)
 ![](/images/database_uri.png)
 
 Then import the dashboard-file from the git repository folder `templates/demosuperset_crypto.json`.
-Once this is done, you can access the dashboard.
+Now you can access the dashboard.
 ![](/images/dashboard.png)
 
-If you want to see how the demo works, you can find the according files in the folder `~/projects/demo/`
+If you want to see how the demo works, you can find the according files in the folder `~/projects/demo/`.
+
+Finally, if you want to disable the auto start of the demo, then enter the following command in the command line interface:
+```
+systemctl disable superset_crypto_consumer && systemctl disable superset_crypto_producer
+```
+
 
 ---
 
