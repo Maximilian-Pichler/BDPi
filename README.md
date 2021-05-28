@@ -81,10 +81,11 @@ Now you can access the dashboard.
 
 If you want to see how the demo works, you can find the according files in the folder `~/projects/demo/`.
 
-Finally, if you want to disable the auto start of the demo, then enter the following command in the command line interface:
-```
-systemctl disable superset_crypto_consumer && systemctl disable superset_crypto_producer
-```
+Finally, if you want to disable the auto start of the demo, then enter the following two command lines:
+
+`systemctl disable superset_crypto_consumer && systemctl stop superset_crypto_consumer`
+
+`systemctl disable superset_crypto_producer && systemctl stop superset_crypto_producer`
 
 
 ---
