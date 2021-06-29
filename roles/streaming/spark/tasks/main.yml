@@ -7,7 +7,7 @@
 
 - name: Download and unzip spark if not present
   unarchive:
-    src: https://ftp.cixug.es/apache/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz
+    src: https://ftp.cixug.es/apache/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
     dest: "{{ home_dir }}/spark"
     remote_src: yes
     extra_opts: [--strip-components=1]
